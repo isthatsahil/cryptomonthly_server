@@ -36,3 +36,29 @@ exports.addPortfolio = async (req, res, next) => {
     }
   } catch (error) {}
 };
+
+exports.updatePortfolio = async (req, res, next) => {
+  try {
+    const pkId = req.body.id;
+    const coin = req.body.cryptocurrency;
+    const date = req.body.date;
+    const quantity = req.body.quantity;
+    const costPrice = req.body.buy;
+    const sellingPrice = req.body.sell;
+    const user = req.body.user;
+    Portfolio.update(
+      {
+        coin: coin,
+        date: date,
+        quantity: quantity,
+        costPrice: costPrice,
+        sellingPrice: sellingPrice,
+        user: user,
+      },
+      { where: { id: pkId } }
+    );
+    res.json({ message: "Portfolio updated successfully", code: "green" });
+  } catch (error) {
+    res.json({error: error});
+  }
+};

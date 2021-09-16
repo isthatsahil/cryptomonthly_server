@@ -1,11 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const portfolioController = require("../controllers/portfolioController");
 
-const portfolioController = require('../controllers/portfolioController');
 
-//router.get('/getAllPortfolios',portfolioController.getAllPortfolios);
-router.get('/getPortfolio',portfolioController.getPortfolio);
-router.post('/addPortfolio',portfolioController.addPortfolio);
-
+router.get("/getPortfolio", portfolioController.getPortfolio);
+router.post("/addPortfolio", portfolioController.addPortfolio);
+router.post("/updatePortfolio", portfolioController.updatePortfolio);
 module.exports = router;
-
