@@ -3,7 +3,6 @@ const sequelize = require("./db/server");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const LOGGER = require("morgan");
-require('dotenv').config()
 const portfolioRoutes = require("./routes/portfolioRoutes");
 const app = express();
 app.use(LOGGER("dev"));

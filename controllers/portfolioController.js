@@ -29,36 +29,43 @@ exports.addPortfolio = async (req, res, next) => {
         user: user,
       });
 
-      res.json({ message: "Portfolio added successfully", code: "green" });
+      res.json({
+        message: "Portfolio added successfully",
+        severity: "success",
+      });
     } else {
       res.set("Access-Control-Allow-Origin", "*");
-      res.json({ message: "Portfolio already exists", code: "yellow" });
+      res.json({ message: "Portfolio already exists", severity: "warning" });
     }
   } catch (error) {}
 };
 
-exports.updatePortfolio = async (req, res, next) => {
-  try {
-    const pkId = req.body.id;
-    const coin = req.body.cryptocurrency;
-    const date = req.body.date;
-    const quantity = req.body.quantity;
-    const costPrice = req.body.buy;
-    const sellingPrice = req.body.sell;
-    const user = req.body.user;
-    Portfolio.update(
-      {
-        coin: coin,
-        date: date,
-        quantity: quantity,
-        costPrice: costPrice,
-        sellingPrice: sellingPrice,
-        user: user,
-      },
-      { where: { id: pkId } }
-    );
-    res.json({ message: "Portfolio updated successfully", code: "green" });
-  } catch (error) {
-    res.json({error: error});
-  }
+exports.updatePortfolio = (req, res, next) => {
+  const pkId = req.body.id;
+  const coin = req.body.cryptocurrency;
+  const date = req.body.date;
+  const quantity = req.body.quantity;
+  const costPrice = req.body.buy;
+  const sellingPrice = req.body.sell;
+  const user = req.body.user;
+  Portfolio.update(
+    {
+      coin: coin,
+      date: date,
+      quantity: quantity,
+      costPrice: costPrice,
+      sellingPrice: sellingPrice,
+      user: user,
+    },
+    { where: { id: pkId } }
+  )
+    .then((result) => {
+      res.json({
+        message: "Portfolio updated successfully",
+        severity: "success",
+      });
+    })
+    .catch((err) => {
+      res.json({ error: err });
+    });
 };
