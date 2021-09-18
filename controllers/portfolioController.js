@@ -1,12 +1,17 @@
 const Portfolio = require("../models/Portfolio");
 
-exports.getPortfolio = async (req, res) => {
-  try {
-    const user = req.query.user;
-    const portfolios = await Portfolio.findAll({ where: { user: user } });
-    res.set("Access-Control-Allow-Origin", "*");
-    res.json(portfolios);
-  } catch (error) {}
+exports.getPortfolio = (req, res) => {
+  const user = req.query.user;
+  Portfolio.findAll({ where: { user: user } })
+    .then((portfolios) => {
+      if (null !== portfolios) {
+        res.set("Access-Control-Allow-Origin", "*");
+        res.json(portfolios);
+      }
+    })
+    .catch((err) => {
+      res.json({ error: err });
+    });
 };
 exports.addPortfolio = async (req, res, next) => {
   try {
