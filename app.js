@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 const sequelize = require("./db/server");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -14,7 +15,7 @@ app.use(portfolioRoutes);
 sequelize
   .sync()
   .then((result) => {
-    app.listen(5000);
+    app.listen(process.env.PORT || 5000, () => console.log("Server running on ::" + process.env.PORT || 5000));
   })
   .catch((err) => {
     console.log("Error while syncing", err);
