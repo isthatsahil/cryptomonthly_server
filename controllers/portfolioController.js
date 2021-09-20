@@ -74,3 +74,15 @@ exports.updatePortfolio = (req, res, next) => {
       res.json({ error: err });
     });
 };
+
+exports.deletePortfolio = (req, res, next) => {
+  const pkIdArray = req.body.pkIds;
+  Portfolio.destroy({ where: { id: pkIdArray } })
+    .then((result) => {
+      res.json({
+        message: "Portfolio deleted successfully",
+        severity: "success",
+      });
+    })
+    .catch((err) => {});
+};
