@@ -104,7 +104,7 @@ app.use(portfolioRoutes);
 sequelize
   .sync()
   .then((result) => {
-    app.listen(5000, () =>
+    app.listen(process.env.PORT || 5000, () =>
       console.log("Server running on ::" + process.env.PORT || 5000)
     );
   })
