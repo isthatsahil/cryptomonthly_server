@@ -40,8 +40,9 @@ app.use("/image/upload", upload.single("image"), (req, res) => {
   if (!req.file) {
     console.log("No file upload");
   } else {
-    console.log(req.file.originalname);
-    const imgUrl = "http://127.0.0.1:5000/upload/images/" + req.file.filename;
+    const imgUrl =
+      "https://cryptomonthly-server.herokuapp.com/upload/images/" +
+      req.file.filename;
     const imageName = req.file.filename;
     Images.create({
       imageName: imageName,
@@ -69,15 +70,14 @@ app.use("/image/getAllImages", (req, res) => {
 
 app.get("/upload/images/:imageId", (req, res) => {
   const filename = req.params.imageId;
-  console.log("file", filename);
   res.sendFile(path.join(__dirname, `upload/images/${filename}`));
 });
-app.use(portfolioRoutes);
 
+app.use(portfolioRoutes);
 sequelize
   .sync()
   .then((result) => {
-    app.listen(5000, () =>
+    app.listen(process.env.PORT || 5000, () =>
       console.log("Server running on ::" + process.env.PORT || 5000)
     );
   })
