@@ -20,13 +20,21 @@ const Portfolio = sequelize.define('portfolio', {
         type : Sequelize.DECIMAL,
         allowNull : true,
     },
-    costPrice : {
+    // costPrice : {
+    //     type : Sequelize.DECIMAL,
+    //     allowNull : false,
+    // },
+    // sellingPrice : {
+    //     type : Sequelize.DECIMAL,
+    //     allowNull : true,
+    // },
+    pricePerCoin: {
         type : Sequelize.DECIMAL,
-        allowNull : false,
+        allowNull: false
     },
-    sellingPrice : {
-        type : Sequelize.DECIMAL,
-        allowNull : true,
+    transactionType: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     user : {
         type : Sequelize.STRING,

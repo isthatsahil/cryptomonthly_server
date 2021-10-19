@@ -18,31 +18,30 @@ exports.addPortfolio = async (req, res, next) => {
     const coin = req.body.cryptocurrency;
     const date = req.body.date;
     const quantity = req.body.quantity;
-    const costPrice = req.body.buy;
-    const sellingPrice = req.body.sell;
+    const pricePerCoin = req.body.pricePerCoin;
+    const transactionType = req.body.transactionType;
     const user = req.body.user;
-    const isPortfolioExists = await Portfolio.findOne({
-      where: { coin: coin, user: user },
-    });
-    if (isPortfolioExists == null) {
-      Portfolio.create({
-        coin: coin,
-        date: date,
-        quantity: quantity,
-        costPrice: costPrice,
-        sellingPrice: sellingPrice,
-        user: user,
-      });
 
-      res.json({
-        message: "Portfolio added successfully",
-        severity: "success",
-      });
-    } else {
-      res.set("Access-Control-Allow-Origin", "*");
-      res.json({ message: "Portfolio already exists", severity: "warning" });
-    }
-  } catch (error) {}
+    const portfolio = await Portfolio.create({
+      coin: coin,
+      date: date,
+      quantity: quantity,
+      pricePerCoin: pricePerCoin,
+      transactionType,
+      user: user,
+    });
+
+    res.json({
+      data: portfolio,
+      message: "Portfolio added successfully",
+      severity: "success",
+    });
+  } catch (error) {
+    res.json({
+      message: "Something went wrong",
+      severity: "error",
+    });
+  }
 };
 
 exports.updatePortfolio = (req, res, next) => {
