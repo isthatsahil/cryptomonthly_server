@@ -1,45 +1,43 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../db/server');
-
-const Portfolio = sequelize.define('portfolio', {
-    id : {
-        type : Sequelize.INTEGER,
-        primaryKey : true,
-        autoIncrement : true,
-        allowNull : false,
+module.exports = (sequelize, DataTypes) => {
+  const Portfolio = sequelize.define("portfolio", {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
     },
-    coin : {
-        type : Sequelize.STRING,
-        allowNull : false,
+    coin: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    date : {
-        type : Sequelize.DATEONLY,
-        allowNull : true,
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
-    quantity : {
-        type : Sequelize.DECIMAL,
-        allowNull : true,
+    quantity: {
+      type: DataTypes.DECIMAL,
+      allowNull: true,
     },
     // costPrice : {
-    //     type : Sequelize.DECIMAL,
+    //     type : DataTypes.DECIMAL,
     //     allowNull : false,
     // },
     // sellingPrice : {
-    //     type : Sequelize.DECIMAL,
+    //     type : DataTypes.DECIMAL,
     //     allowNull : true,
     // },
     pricePerCoin: {
-        type : Sequelize.DECIMAL,
-        allowNull: false
+      type: DataTypes.DECIMAL,
+      allowNull: false,
     },
     transactionType: {
-        type: Sequelize.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    user : {
-        type : Sequelize.STRING,
-        allowNull : false,
-    }
-})
-
-module.exports = Portfolio;
+    user: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
+  return Portfolio;
+};

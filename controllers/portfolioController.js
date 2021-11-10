@@ -1,4 +1,5 @@
-const Portfolio = require("../models/Portfolio");
+const models = require("../models/index");
+const Portfolio = models.portfolio;
 
 exports.getPortfolio = (req, res) => {
   const user = req.query.user;

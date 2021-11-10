@@ -1,44 +1,40 @@
 const express = require("express");
-require("dotenv").config();
 const path = require("path");
-const multer = require("multer");
-const sequelize = require("./db/server");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const LOGGER = require("morgan");
+
+/**
+ * @description: Routes for different path
+ */
 const portfolioRoutes = require("./routes/portfolioRoutes");
-const imageUploader = require("./routes/imageUploaderRoutes");
+const platformRoutes = require("./routes/platformRoutes");
+const userRoutes = require("./routes/userRoute");
+/**
+ * @description: DB connection and utitlity
+ */
+const sequelize = require("./db/server");
 const { cloudinary } = require("./lib/cloudinary");
 const Images = require("./models/Images");
 
+/**
+ * @description: Initialize express app
+ */
 const app = express();
-
+require("dotenv").config();
 app.use(LOGGER("dev"));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
 app.use(express.json({ limit: "50mb" }));
-
 app.use(cors());
 
-//! Use of Multer
-const storage = multer.diskStorage({
-  destination: (req, file, callBack) => {
-    callBack(null, "./upload/images/"); // 'upload/images' directory name where save the file
-  },
-  filename: (req, file, callBack) => {
-    console.log("file", file);
-    callBack(
-      null,
-      file.originalname.split(".")[0] +
-        "-" +
-        Date.now() +
-        path.extname(file.originalname)
-    );
-  },
-});
+app.use(userRoutes);
+app.use(platformRoutes);
+app.use(portfolioRoutes);
 
-const upload = multer({
-  storage: storage,
-});
+/**
+ * @description: Upload image to cloudinary logic below
+ *
+ */
 app.get("/api/images", async (req, res) => {
   const { resources } = await cloudinary.search
     .expression("folder:certificates")
@@ -49,6 +45,7 @@ app.get("/api/images", async (req, res) => {
   const publicIds = resources.map((file) => file.public_id);
   res.send(publicIds);
 });
+
 app.post("/image/upload", async (req, res) => {
   try {
     const fileStr = req.body.data;
@@ -62,24 +59,6 @@ app.post("/image/upload", async (req, res) => {
     res.status(500).json({ err: err });
   }
 });
-
-// app.use("/image/upload", upload.single("image"), (req, res) => {
-//   if (!req.file) {
-//     console.log("No file upload");
-//   } else {
-//     const imgUrl =
-//       "https://cryptomonthly-server.herokuapp.com/upload/images/" +
-//       req.file.filename;
-//     const imageName = req.file.filename;
-//     Images.create({
-//       imageName: imageName,
-//       imageUrl: imgUrl,
-//     });
-//     res.json({
-//       msg: "Success",
-//     });
-//   }
-// });
 
 app.use("/image/getAllImages", (req, res) => {
   Images.findAll()
@@ -100,13 +79,13 @@ app.get("/upload/images/:imageId", (req, res) => {
   res.sendFile(path.join(__dirname, `upload/images/${filename}`));
 });
 
-app.use(portfolioRoutes);
+/**
+ * @description: Launcher for app.js
+ */
 sequelize
   .sync()
   .then((result) => {
-    app.listen(process.env.PORT || 5000, () =>
-      console.log("Server running on ::" + process.env.PORT || 5000)
-    );
+    app.listen(5001, () => console.log("Server running on ::", 5001));
   })
   .catch((err) => {
     console.log("Error while syncing", err);
